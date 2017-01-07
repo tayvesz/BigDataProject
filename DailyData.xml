@@ -1,0 +1,18 @@
+<workflow-app name="DailyData" xmlns="uri:oozie:workflow:0.5">
+    <start to="shell-facd"/>
+    <action name="shell-facd">
+        <shell xmlns="uri:oozie:shell-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <exec>/user/hdfs/dailydownload.sh</exec>
+            <file>/user/hdfs/dailydownload.sh#dailydownload.sh</file>
+              <capture-output/>
+        </shell>
+        <ok to="End"/>
+        <error to="Kill"/>
+    </action>
+    <kill name="Kill">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="End"/>
+</workflow-app>
